@@ -1,0 +1,6 @@
+;; -*- mode: scheme; -*-
+
+(channel
+ (version 0)
+ (news-file "news.txt")
+ (directory "guix-chan"))
