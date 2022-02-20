@@ -1,0 +1,50 @@
+
+
+* Ian's guix channel
+
+** Packages
+
+*** Cyrus-sasl-xoauth2
+
+*Determine the hash*
+
+#+name: cyrus-sasl-xoauth2-hash
+#+begin_src sh :dir /tmp/ :results output :noweb yes
+git clone git@github.com:moriyoshi/cyrus-sasl-xoauth2.git
+cd cyrus-sasl-xoauth2
+git checkout tags/v0.2
+guix hash -rx .
+#+end_src
+
+#+RESULTS:
+: 1py9f1mn5k5xihrk0lfrwr6723c22gjb7lmgya83ibvislm2x3wl
+
+
+ #+begin_src scheme :tangle guix-chan/cyrus-sasl-xoauth2 :mkdirp yes :noweb yes
+(define-module (gnu packages cyrus-sasl-xoauth2)
+  #:use-module (guix packages)
+  #:use-module (guix download)
+  #:use-module (guix build-system gnu)
+  #:use-module (guix licenses))
+
+(define-public cyrus-sasl-xoauth2
+  (package
+   (name "cyrus-sasl-xoauth2")
+   (version "0.2")
+   (source (origin
+            (method git-fetch)
+            (uri (git-reference
+		  (url "https://github.com/moriyoshi/cyrus-sasl-xoauth2.git")
+		  (commit (string-append "v" version)) ; This string denotes either the commit to fetch (a hexadecimal string, either the full SHA1 commit or a “short” commit string; the latter is not recommended) or the tag to fetch.
+		  ))
+
+            (sha256
+             (base32
+              "<<cyrus-sasl-xoauth2-hash()>>"))))
+   (build-system cmake-build-system)
+   (arguments '(#:configure-flags '("--enable-silent-rules")))
+   (synopsis "Plugin implementation of XOAUTH2")
+   (description "Plugin implementation of XOAUTH2")
+   (home-page "https://github.com/moriyoshi/cyrus-sasl-xoauth2")
+   (license gpl3+)))
+ #+end_src
